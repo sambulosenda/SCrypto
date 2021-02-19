@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, AntDesign, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
@@ -7,8 +7,13 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
-
+import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../../types';
+import HomeScreen from '../screens/HomeScreen';
+import PortfolioScreen from '../screens/PortfolioScreen';
+import MarketScreen from '../screens/MarketScreen';
+import RankingsScreen from '../screens/RankingsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
@@ -17,19 +22,53 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
+    >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="home" size={30} color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Portfolio"
+        component={PortfolioScreen}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="piechart" color={color} size={30} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Market"
+        component={MarketScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5 name="chart-line" color={color} size={30} />
+          ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Rankings"
+        component={RankingsScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="leaderboard" color={color} size={30} />
+          ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="user" color={color} size={30} />
+          ),
         }}
       />
     </BottomTab.Navigator>
