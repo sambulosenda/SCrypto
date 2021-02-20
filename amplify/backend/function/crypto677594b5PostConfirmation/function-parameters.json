@@ -1,0 +1,16 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "crypto677594b5",
+  "functionName": "crypto677594b5PostConfirmation",
+  "resourceName": "crypto677594b5PostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "/snapshot/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "roleName": "crypto677594b5PostConfirmation",
+  "skipEdit": true,
+  "enableCors": false
+}

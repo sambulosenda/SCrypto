@@ -1,6 +1,9 @@
+import { useNavigation , CommonActions } from "@react-navigation/native";
+import { Auth} from "aws-amplify";
 import React, {useState} from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import image from "../../assets/images/Saly-1.png";
+
 
 const ProfileScreen = () => {
 
@@ -14,8 +17,16 @@ const ProfileScreen = () => {
       
     });
 
-    const signout = () => {
-        console.warn("Signout")
+  const navigation = useNavigation();
+
+    const signout = async () => {
+      await Auth.signOut();
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: "WelcomeScreen" }],
+            })
+          );
     }
   return (
     <View style={styles.root}>

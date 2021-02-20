@@ -12,6 +12,8 @@ import { RootStackParamList } from "../../types";
 import BottomTabNavigator from "./BottomTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
 import CoinDetailsScreen from "../screens/CoinDetailsScreen";
+import CoinExchangeScreen from "../screens/CoinExchange";
+import WelcomeScreen from "../screens/WelcomeScreen";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -38,9 +40,25 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="WelcomeScreen"
+        component={WelcomeScreen}
+        options={{
+          headerShown: false
+        }}
+      />
+
+      <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
         options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="CoinExchange"
+        component={CoinExchangeScreen}
+        options={{
+          title: "Coin Exchange",
+        }}
       />
       <Stack.Screen
         name="CoinDetails"
@@ -49,6 +67,7 @@ function RootNavigator() {
           title: "Price Data",
         }}
       />
+
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

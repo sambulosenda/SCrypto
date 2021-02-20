@@ -1,4 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import CoinPriceGraph from "../../components/CoinPriceGraph";
@@ -184,7 +185,7 @@ const CoinDetailsScreen = () => {
     name: "Virtual Dollars ",
     image:
       "https://pbs.twimg.com/profile_images/968501175359242240/4u2XgLTL_400x400.jpg",
-    symbol: "USD",
+    symbol: "BTC",
     valueChange24H: +1.2,
     valueChange1D: -1.2,
     valueChange7D: 1.1,
@@ -192,8 +193,16 @@ const CoinDetailsScreen = () => {
     amount: 2,
   });
 
-  const onBuy = () => {};
-  const onSell = () => {};
+  const navigation = useNavigation();
+
+  const onBuy = () => {
+    navigation.navigate('CoinExchange', {isBuy: true, coinData})
+  };
+  const onSell = (
+
+  ) => {
+     navigation.navigate("CoinExchange", { isBuy: false, coinData });
+  };
   return (
     <View style={styles.root}>
       <View style={styles.topContainer}>
@@ -254,13 +263,13 @@ const CoinDetailsScreen = () => {
 
       <View style={[styles.row, { marginTop: "auto" }]}>
         <Pressable
-          onPress={onSell}
+          onPress={onBuy}
           style={[styles.button, { backgroundColor: "#24850f" }]}
         >
           <Text style={styles.buttonText}>Buy</Text>
         </Pressable>
         <Pressable
-          onPress={onBuy}
+          onPress={onSell}
           style={[styles.button, { backgroundColor: "red" }]}
         >
           <Text style={styles.buttonText}>Sell</Text>
