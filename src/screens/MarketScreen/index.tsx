@@ -1,42 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image, ImagePropTypes } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import image from "../../assets/images/Saly-1.png";
 import MarketCoin from "../../components/MarketCoin";
 
-const PortfolioCoins = [
-  {
-    id: "1",
-    name: "Virtual Dollars ",
-    symbol: "USD",
-    image:
-      "https://pbs.twimg.com/profile_images/968501175359242240/4u2XgLTL_400x400.jpg",
-    valueChange24H: -1.2,
-    valueUSD: 34554,
-  },
+import { API, graphqlOperation } from "aws-amplify";
+import { listCoins } from "../../graphql/queries";
 
-  {
-    id: "2",
-    name: "Bitcoin ",
-    symbol: "BTC",
-    image:
-      "https://pbs.twimg.com/profile_images/968501175359242240/4u2XgLTL_400x400.jpg",
-
-    valueChange24H: 2,
-    valueUSD: 50554,
-  },
-
-  {
-    id: "3",
-    name: "Etherum",
-    symbol: "ETH",
-    image:
-      "https://pbs.twimg.com/profile_images/968501175359242240/4u2XgLTL_400x400.jpg",
-    valueChange24H: 2,
-    valueUSD: 54554,
-  },
-];
 const MarketScreen = () => {
+  const [coins, setcoins] = useState([]);
+  const [loading, setloading] = useState(false);
+
+  const fetchCoins = async () => {
+    setloading(true);
+    try {
+      const response = await API.graphql(graphqlOperation(listCoins));
+      setcoins(response.data.listCoins.items);
+      console.log(response);
+    } catch {
+      console.error(e);
+    } finally {
+      setloading(false);
+    }
+  };
+  useEffect(() => {
+    fetchCoins();
+  }, []);
+
   return (
     <View style={styles.root}>
       <Image style={styles.image} source={image} />
@@ -46,7 +36,9 @@ const MarketScreen = () => {
 
       <FlatList
         style={{ width: "100%" }}
-        data={PortfolioCoins}
+        data={coins}
+        onRefresh={fetchCoins}
+        refreshing={loading}
         renderItem={({ item }) => <MarketCoin MarketCoin={item} />}
       />
     </View>

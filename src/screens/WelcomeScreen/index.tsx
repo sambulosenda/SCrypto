@@ -1,24 +1,26 @@
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Auth, Hub } from "aws-amplify";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import image from "../../assets/images/Saly-1.png";
+import AppContext from "../../utils/AppContext";
 
 const googleButtonImage = require("../../assets/images/googlebutton.png");
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
+  const { setUserId } = useContext(AppContext);
 
   useEffect(() => {
     const fetchUser = async () => {
       const user = await Auth.currentAuthenticatedUser();
+
       if (user) {
-        console.log("user data");
-        console.log(user);
+        setUserId(user.attributes.sub);
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: "Root" },],
+            routes: [{ name: "Root" }],
           })
         );
       }
@@ -29,10 +31,12 @@ const WelcomeScreen = () => {
   useEffect(() => {
     Hub.listen("auth", ({ payload: { event, data } }) => {
       if (event === "signIn") {
+        console.log(data);
+        setUserId(data.signInUserSession.accessToken.payload.sub);
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: "Root" },],
+            routes: [{ name: "Root" }],
           })
         );
       }
@@ -40,7 +44,6 @@ const WelcomeScreen = () => {
   }, []);
 
   const signInGoogle = async () => {
-   
     await Auth.federatedSignIn({ provider: "google" });
   };
   return (

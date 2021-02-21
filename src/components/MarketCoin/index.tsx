@@ -5,23 +5,24 @@ import PercentageChange from "../PercentageChange";
 
 export const PortfolioCoinProps = {
   MarketCoin: {
+    id: String,
     image: String,
     name: String,
     symbol: String,
     valueChange24H: Number,
-    valueUSD: Number,
+    currentPrice: Number,
   },
 };
 
 
 const MarketCoin = (props: PortfolioCoinProps) => {
   const {
-    MarketCoin: { image, name, symbol, amount, valueChange24H, valueUSD },
+    MarketCoin: { id, image, name, symbol, amount, valueChange24H, currentPrice},
   } = props;
 
   const navigation = useNavigation();
   return (
-    <Pressable style={styles.root} onPress={() => navigation.navigate('CoinDetails')}>
+    <Pressable style={styles.root} onPress={() => navigation.navigate('CoinDetails', {id})}>
       <View style={styles.left}>
         <Image style={styles.image} source={{ uri: image }} />
         <View>
@@ -31,7 +32,7 @@ const MarketCoin = (props: PortfolioCoinProps) => {
       </View>
 
       <View style={{ alignItems: "flex-end" }}>
-        <Text>{valueUSD}</Text>
+        <Text>${currentPrice}</Text>
        <PercentageChange value={valueChange24H} />
       </View>
     </Pressable>
