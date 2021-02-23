@@ -247,10 +247,10 @@ const CoinDetailsScreen = () => {
   }
 
   const onBuy = () => {
-    navigation.navigate("CoinExchange", { isBuy: true, coin });
+    navigation.navigate("CoinExchange", { isBuy: true, coin, portfolioCoin });
   };
   const onSell = () => {
-    navigation.navigate("CoinExchange", { isBuy: false, coin });
+    navigation.navigate("CoinExchange", { isBuy: false, coin, portfolioCoin });
   };
   return (
     <View style={styles.root}>

@@ -6,10 +6,12 @@ import {
   Pressable,
   StyleSheet,
   Text,
-    View,
-  Platform
+  View,
+  Platform,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput, TouchableHighlight } from "react-native-gesture-handler";
+import { API, graphqlOperation } from "aws-amplify";
+import { exchangeCoins } from "../../graphql/mutations";
 
 const CoinExchangeScreen = (props) => {
   const [coinAmount, setcoinAmount] = useState(null);
@@ -19,7 +21,8 @@ const CoinExchangeScreen = (props) => {
   const maxUSD = 100000;
 
   const isBuy = route?.params?.isBuy;
-  const coinData = route?.params?.coinData;
+  const coin = route?.params?.coin;
+  const portfolioCoin = route?.params?.portfolioCoin;
 
   useEffect(() => {
     const amount = parseFloat(coinAmount);
@@ -28,7 +31,7 @@ const CoinExchangeScreen = (props) => {
       setusdValue("");
       return;
     }
-    setusdValue((amount * coinData.currentPrice).toString());
+    setusdValue((amount * coin.currentPrice).toString());
   }, [coinAmount]);
 
   useEffect(() => {
@@ -38,30 +41,56 @@ const CoinExchangeScreen = (props) => {
       setusdValue("");
       return;
     }
-    setcoinAmount((amount / coinData.currentPrice).toString());
+    setcoinAmount((amount / coin.currentPrice).toString());
   }, [usdValue]);
 
-  const onplaceOrder = () => {
+  const placeOrder = async () => {
+    try {
+      const response = await API.graphql(
+        graphqlOperation(exchangeCoins, {
+          coinId: coin.id,
+          isBuy,
+          amount: parseFloat(coinAmount),
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const placeorder = () => {
     if (isBuy && parseFloat(usdValue) > maxUSD) {
       Alert.alert("Error", "Not enough coins");
     }
-
-    if (!isBuy && parseFloat(coinAmount) > coinData.amount) {
-      Alert.alert("Error", `not enough coins ${coinData.symbol}`);
+    if (
+      !isBuy &&
+      (!portfolioCoin || parseFloat(coinAmount) > portfolioCoin.amount)
+    ) {
+      Alert.alert(
+        "Error",
+        `not enough coins ${coin.symbol} coins. Max: ${coin.amount || 0}`
+      );
     }
+
+    placeOrder();
   };
+
   return (
-    <KeyboardAvoidingView style={styles.root} behavior={Platform.OS == 'ios' ? "padding" : "height"} keyboardVerticalOffset={100} >
+    <View
+      style={styles.root}
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={100}
+    >
       <Text style={styles.title}>
         {isBuy ? "Buy" : "Sell"}
         {"  "}
-        {coinData?.name}
+        {coin?.name}
       </Text>
 
       <Text style={styles.subtitle}>
-        1{coinData?.symbol}
+        1{coin?.symbol}
         {"="}
-        {coinData?.currentPrice}
+        {coin?.currentPrice}
       </Text>
 
       <View style={styles.inputsContainer}>
@@ -72,7 +101,7 @@ const CoinExchangeScreen = (props) => {
             value={coinAmount}
             onChangeText={setcoinAmount}
           />
-          <Text>{coinData?.symbol}</Text>
+          <Text>{coin?.symbol}</Text>
         </View>
         <Text style={{ fontSize: 30 }}>=</Text>
         <View style={styles.inputContainer}>
@@ -86,10 +115,10 @@ const CoinExchangeScreen = (props) => {
           <Text>USD</Text>
         </View>
       </View>
-      <Pressable style={styles.button} onPress={onplaceOrder}>
+      <Pressable style={styles.button} onPress={placeorder}>
         <Text style={styles.btnText}>Place Order</Text>
       </Pressable>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

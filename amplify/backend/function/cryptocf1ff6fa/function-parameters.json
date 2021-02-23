@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "api": {
+      "crypto": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

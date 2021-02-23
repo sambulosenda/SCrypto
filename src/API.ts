@@ -137,6 +137,18 @@ export type ModelCoinFilterInput = {
   not?: ModelCoinFilterInput | null,
 };
 
+export type ExchangeCoinsMutationVariables = {
+  coinId: string,
+  isBuy: boolean,
+  amount: number,
+  usdPortfolioCoinId?: string | null,
+  coinPortfolioCoinId?: string | null,
+};
+
+export type ExchangeCoinsMutation = {
+  exchangeCoins: boolean,
+};
+
 export type CreateUserMutationVariables = {
   input: CreateUserInput,
   condition?: ModelUserConditionInput | null,

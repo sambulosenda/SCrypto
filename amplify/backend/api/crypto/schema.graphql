@@ -20,7 +20,7 @@ type PortfolioCoin
   coin: Coin @connection(fields: ["coinId"])
 }
 
-type Coin @model(mutations: null){
+type Coin @model(mutations: null) {
   id: ID!
   cgId: String!
   name: String!
@@ -31,4 +31,14 @@ type Coin @model(mutations: null){
   valueChange1D: Float!
   valueChange7D: Float!
   priceHistoryString: String
+}
+
+type Mutation {
+  exchangeCoins(
+    coinId: ID!
+    isBuy: Boolean!
+    amount: Float!
+    usdPortfolioCoinId: ID
+    coinPortfolioCoinId: ID
+  ): Boolean! @function(name: "cryptocf1ff6fa-${env}")
 }
